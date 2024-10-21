@@ -1,9 +1,15 @@
 
+ #include "f28002x_device.h"
 
-/**
- * main.c
- */
-int main(void)
+void main(void)
 {
-	return 0;
+    EALLOW;
+    GpioCtrlRegs.GPADIR.bit.GPIO0 = 1;  // GPIO0 = output
+    EDIS;
+
+    for(;;)
+    {
+        GpioDataRegs.GPATOGGLE.bit.GPIO0 = 1;
+        for(unsigned int i=0; i<65000; i++){}
+    }
 }
