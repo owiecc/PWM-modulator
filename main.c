@@ -4,7 +4,8 @@
 void main(void)
 {
     EALLOW;
-    GpioCtrlRegs.GPADIR.bit.GPIO0 = 1;  // GPIO0 = output
+    GpioCtrlRegs.GPADIR.all = 0x00FF;  // output
+
     EDIS;
 
     for(;;)
