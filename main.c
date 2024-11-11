@@ -1,9 +1,9 @@
 
+ #include "f28002x_device.h"
 
-/**
- * main.c
- */
-int main(void)
+void main(void)
 {
-	return 0;
+    EALLOW;
+    GpioCtrlRegs.GPADIR.all = 0x00FF;  // GPIO0..7 output
+    EDIS;
 }
