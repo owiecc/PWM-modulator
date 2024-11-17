@@ -26,11 +26,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>device.c</name>
-			<type>1</type>
-			<locationURI>C2000WARE_ROOT/device_support/f28002x/common/source/device.c</locationURI>
-		</link>
-		<link>
 			<name>f28002x_globalvariabledefs.c</name>
 			<type>1</type>
 			<locationURI>C2000WARE_ROOT/device_support/f28002x/headers/source/f28002x_globalvariabledefs.c</locationURI>
