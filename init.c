@@ -2,7 +2,7 @@
 #include "init.h"
 #include "f28002x_device.h"
 
-void initDSP(void)
+void InitDSP(void)
 {
     InitSysCtrl(); // Init device clock and peripherals
 

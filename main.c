@@ -3,5 +3,5 @@
 
 void main(void)
 {
-    initDSP();
+    InitDSP();
 }
