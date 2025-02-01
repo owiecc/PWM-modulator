@@ -49,6 +49,7 @@ int SendI2C(unsigned int data)
     I2caRegs.I2CDXR.all = data; // load data into the transmit register
     while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
     I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
+    while(I2caRegs.I2CMDR.bit.STP != 0x0); // wait for STOP condition
     return 0;
 }
 
@@ -67,5 +68,6 @@ int SendI2C2(unsigned int data1, unsigned int data2)
     I2caRegs.I2CDXR.all = data2; // load data into the transmit register
     while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
     I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
+    while(I2caRegs.I2CMDR.bit.STP != 0x0); // wait for STOP condition
     return 0;
 }
