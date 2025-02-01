@@ -28,11 +28,11 @@ void InitI2C(void)
     I2caRegs.I2CCLKL = 195;
     // TODO Test timings
 
-    // Take I2C module out of reset state
-    I2caRegs.I2CMDR.bit.IRS = 1;
-
     // load slave address
     I2caRegs.I2CSAR.all = I2C_SLAVE_ADDR;
+
+    // Take I2C module out of reset state
+    I2caRegs.I2CMDR.bit.IRS = 1;
 }
 
 int SendI2C(unsigned int data)
