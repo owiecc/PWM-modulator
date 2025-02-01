@@ -1,6 +1,7 @@
 
 #include "oled.h"
 #include "f28002x_device.h"
+#include "f28002x_i2c.h"
 
 void InitI2C(void)
 {
@@ -37,77 +38,34 @@ void InitI2C(void)
 
 int SendI2C(unsigned int data)
 {
-    // wait for STOP condition
-    while (I2caRegs.I2CMDR.bit.STP != 0);
-
-    // master mode
-    I2caRegs.I2CMDR.bit.MST = 1;
-
-    // generate START condition
-    I2caRegs.I2CMDR.bit.STT = 1;
-
-    // repeat mode
-    I2caRegs.I2CMDR.bit.RM = 1;
-
-    // transmit mode
-    I2caRegs.I2CMDR.bit.TRX = 1;
-
-    // wait for XRDY flag to transmit data
-    while (I2caRegs.I2CSTR.bit.XRDY != 1);
-
-    // load data into the transmit register
-    I2caRegs.I2CDXR.all = data;
-
-    // wait for XRDY flag to transmit data or ARDY if we get NACKed
-    //while (I2caRegs.I2CSTR.bit.XRDY != 1 || I2caRegs.I2CSTR.bit.ARDY != 1);
-    while (I2caRegs.I2CSTR.bit.XRDY != 1);
-
-    I2caRegs.I2CMDR.bit.STP = 1;
-
-    for (unsigned long int i = 0; i < 10000; i++) {}
-
+    while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CMDR.bit.MST = 1; // master mode
+    I2caRegs.I2CMDR.all = 0x66A0;
+    I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
+    I2caRegs.I2CMDR.bit.RM = 1; // repeat mode
+    I2caRegs.I2CMDR.bit.TRX = 1; // transmit mode
+    I2caRegs.I2CDXR.all = 0x00; // load command/data byte; Co = 0, D/C = 0
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CDXR.all = data; // load data into the transmit register
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
     return 0;
 }
 
 int SendI2C2(unsigned int data1, unsigned int data2)
 {
-    SendI2C(data1);
-    SendI2C(data2);
-    /*
-    // wait for STOP condition
-    while (I2caRegs.I2CMDR.bit.STP != 0);
-
-    // master mode
-    I2caRegs.I2CMDR.bit.MST = 1;
-
-    // generate START condition
-    I2caRegs.I2CMDR.bit.STT = 1;
-
-    // repeat mode
-    I2caRegs.I2CMDR.bit.RM = 1;
-
-    // transmit mode
-    I2caRegs.I2CMDR.bit.TRX = 1;
-
-    // wait for XRDY flag to transmit data
-    while (I2caRegs.I2CSTR.bit.XRDY != 1);
-
-    // load data into the transmit register
-    I2caRegs.I2CDXR.all = data1;
-
-    // wait for XRDY flag to transmit data
-    while (I2caRegs.I2CSTR.bit.XRDY != 1);
-
-    // load data into the transmit register
-    I2caRegs.I2CDXR.all = data2;
-
-    // wait for XRDY flag to transmit data or ARDY if we get NACKed
-    //while (I2caRegs.I2CSTR.bit.XRDY != 1 || I2caRegs.I2CSTR.bit.ARDY != 1);
-    while (I2caRegs.I2CSTR.bit.XRDY != 1);
-
-    I2caRegs.I2CMDR.bit.STP = 1;
-
-    asm(" RPT #120 || NOP");
-*/
+    while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CMDR.bit.MST = 1; // master mode
+    I2caRegs.I2CMDR.all = 0x66A0;
+    I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
+    I2caRegs.I2CMDR.bit.RM = 1; // repeat mode
+    I2caRegs.I2CMDR.bit.TRX = 1; // transmit mode
+    I2caRegs.I2CDXR.all = 0x00; // load command/data byte; Co = 0, D/C = 0
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CDXR.all = data1; // load data into the transmit register
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CDXR.all = data2; // load data into the transmit register
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
     return 0;
 }
