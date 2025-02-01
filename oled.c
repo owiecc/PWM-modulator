@@ -10,10 +10,10 @@ void InitI2C(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;
     GpioCtrlRegs.GPAQSEL2.bit.GPIO18 = 3; // Async input
     GpioCtrlRegs.GPAQSEL2.bit.GPIO19 = 3;
-    GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 2; // SCL
     GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 1; // SCL
-    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 2; // SDL
+    GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 2; // SCL
     GpioCtrlRegs.GPAGMUX2.bit.GPIO19 = 1; // SDA
+    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 2; // SDL
     EDIS;
 
     // Set I2C module in reset state
