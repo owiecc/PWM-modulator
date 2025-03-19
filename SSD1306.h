@@ -2,7 +2,7 @@
 #ifndef SSD1306_H_
 #define SSD1306_H_
 
-#define DISPLAY_I2C_ADDR  0x3C
+#define DISPLAY_I2C_ADDR 0x3C
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 64
 
