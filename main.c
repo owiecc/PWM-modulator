@@ -1,7 +1,7 @@
 
 #include "f28002x_device.h"
 #include "init.h"
-#include "oled.h"
+#include "SSD1306.h"
 #include <stdlib.h>
 
 void main(void)

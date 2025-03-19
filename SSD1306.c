@@ -1,5 +1,5 @@
 
-#include "oled.h"
+#include "SSD1306.h"
 #include "f28002x_device.h"
 #include "f28002x_i2c.h"
 
