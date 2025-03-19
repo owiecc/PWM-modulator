@@ -61,11 +61,33 @@ int SendI2C2(unsigned int data1, unsigned int data2)
     I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
     I2caRegs.I2CMDR.bit.RM = 1; // repeat mode
     I2caRegs.I2CMDR.bit.TRX = 1; // transmit mode
-    I2caRegs.I2CDXR.all = 0x00; // load command/data byte; Co = 0, D/C = 0
+    I2caRegs.I2CDXR.all = 0x00; // command byte; Co = 0, D/C = 0
     while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
     I2caRegs.I2CDXR.all = data1; // load data into the transmit register
     while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
     I2caRegs.I2CDXR.all = data2; // load data into the transmit register
+    while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+    I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
+    while(I2caRegs.I2CMDR.bit.STP != 0x0); // wait for STOP condition
+    return 0;
+}
+
+int SendDisplayBuffer(unsigned int *buffer, unsigned int sizeBuffer) 
+{
+    //unsigned int sizeBuffer = 128; // (OLED_WIDTH*OLED_HEIGHT)/2;
+    unsigned int *ptr = buffer;
+    while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CMDR.bit.MST = 1; // master mode
+    I2caRegs.I2CMDR.all = 0x66A0;
+    I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
+    I2caRegs.I2CMDR.bit.RM = 1; // repeat mode
+    I2caRegs.I2CMDR.bit.TRX = 1; // transmit mode
+    I2caRegs.I2CDXR.all = 0x40; // data byte; Co = 0, D/C = 1
+    while (sizeBuffer--) {
+        unsigned int data = *ptr++; // get data (two bytes)
+        while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
+        I2caRegs.I2CDXR.all = data; // load data into the transmit register
+    }
     while (I2caRegs.I2CSTR.bit.XRDY != 1); // wait for end of transmission
     I2caRegs.I2CMDR.bit.STP = 1; // generate STOP condition
     while(I2caRegs.I2CMDR.bit.STP != 0x0); // wait for STOP condition
