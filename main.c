@@ -2,7 +2,6 @@
 #include "f28002x_device.h"
 #include "init.h"
 #include "SSD1306.h"
-#include <stdlib.h>
 
 void main(void)
 {
