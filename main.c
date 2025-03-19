@@ -11,10 +11,10 @@ void main(void)
     InitI2C();
     InitDisplay();
 
-    unsigned long int n = 1024;//DISPLAY_WIDTH * DISPLAY_HEIGHT/8; 
-    Uint16* buffer = malloc(n);
+    unsigned int n = DISPLAY_WIDTH * DISPLAY_HEIGHT/8;
+    unsigned int *buffer = malloc(n);
 
-    for (unsigned long int i = 0; i<n; i++) {
+    for (unsigned int i = 0; i<n; i++) {
         buffer[i] = 0x00;
     }
     
