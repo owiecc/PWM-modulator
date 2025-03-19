@@ -4,5 +4,6 @@
 
 void InitSysCtrl(void);
 void InitDSP(void);
+void InitI2C(void);
 
 #endif /* INIT_H_ */

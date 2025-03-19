@@ -6,7 +6,7 @@
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 64
 
-void InitI2C(void);
+void InitDisplay(void);
 int SendI2C(unsigned int);
 int SendI2C2(unsigned int, unsigned int);
 int SendDisplayBuffer(unsigned int *, unsigned int);

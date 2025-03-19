@@ -3,42 +3,38 @@
 #include "f28002x_device.h"
 #include "f28002x_i2c.h"
 
-void InitI2C(void)
+void InitDisplay()
 {
-    // Configure GPIO port
-    EALLOW;
-    GpioCtrlRegs.GPAPUD.bit.GPIO18 = 1; // Disable pull-up
-    GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;
-    GpioCtrlRegs.GPAQSEL2.bit.GPIO18 = 3; // Async input
-    GpioCtrlRegs.GPAQSEL2.bit.GPIO19 = 3;
-    GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 1; // SCL
-    GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 2; // SCL
-    GpioCtrlRegs.GPAGMUX2.bit.GPIO19 = 1; // SDA
-    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 2; // SDL
-    EDIS;
+    SendI2C(0xAE); // Display off
+    SendI2C2(0xD5, 0x80); // Set oscillator frequency
+    SendI2C2(0xA8, DISPLAY_HEIGHT - 1); // Set MUX ratio
+    SendI2C2(0xD3, 0x00); // Set no offset 
+    SendI2C(0x40); // Set display start line
+    SendI2C2(0x8D, 0x14); // Enable charge pump regulator
+    SendI2C2(0x20, 0x00); // Set memory mode KS0108
+    SendI2C(0xA1); // Set segment re-map 0xA0 | 0x01
+    SendI2C(0xC8); // Set COM output scan direction
+    SendI2C2(0xDA, 0x12); // Set COM pins hardware configuration
+    SendI2C2(0x81, 0xCF); // Set contrast
+    SendI2C2(0xD9, 0xF1); // Set precharge
 
-    // Set I2C module in reset state
-    I2caRegs.I2CMDR.bit.IRS = 0;
+    SendI2C2(0xDB, 0x40); // Set VCOM detect
+    SendI2C(0xA4); // Entire display on
+    SendI2C(0xA6); // Set normal display
+    SendI2C(0x2E); // Deactivate scroll
+    SendI2C(0xAF); // Display on
 
-    // I2C module frequency should be between 7 and 12MHz per 6.14.2.1.1 I2C Timing Requirements
-    I2caRegs.I2CPSC.all = 9; // SYSCLK/(I2CPSC+1) = 10MHz
-
-    // I2C clock set at 50kHz (100kHz max)
-    // d = 5 for I2CPSC = 9 per Table 23-1
-    I2caRegs.I2CCLKH = 195;
-    I2caRegs.I2CCLKL = 195;
-    // TODO Test timings
-
-    // load slave address
-    I2caRegs.I2CSAR.all = I2C_SLAVE_ADDR;
-
-    // Take I2C module out of reset state
-    I2caRegs.I2CMDR.bit.IRS = 1;
+    SendI2C2(0x22, 0x00); // Set page address
+    SendI2C(0xFF); // Set page end
+    SendI2C2(0x21, 0x00); // Set column address
+    SendI2C(DISPLAY_WIDTH - 1); // Set column end
 }
+
 
 int SendI2C(unsigned int data)
 {
     while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CSAR.all = DISPLAY_I2C_ADDR; // display address
     I2caRegs.I2CMDR.bit.MST = 1; // master mode
     I2caRegs.I2CMDR.all = 0x66A0;
     I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
@@ -56,6 +52,7 @@ int SendI2C(unsigned int data)
 int SendI2C2(unsigned int data1, unsigned int data2)
 {
     while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CSAR.all = DISPLAY_I2C_ADDR; // display address
     I2caRegs.I2CMDR.bit.MST = 1; // master mode
     I2caRegs.I2CMDR.all = 0x66A0;
     I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
@@ -77,6 +74,7 @@ int SendDisplayBuffer(unsigned int *buffer, unsigned int sizeBuffer)
     //unsigned int sizeBuffer = 128; // (OLED_WIDTH*OLED_HEIGHT)/2;
     unsigned int *ptr = buffer;
     while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
+    I2caRegs.I2CSAR.all = DISPLAY_I2C_ADDR; // display address
     I2caRegs.I2CMDR.bit.MST = 1; // master mode
     I2caRegs.I2CMDR.all = 0x66A0;
     I2caRegs.I2CMDR.bit.STT = 1; // generate START condition
