@@ -6,7 +6,8 @@
 
 void main(void)
 {
-    InitDSP();
+    InitSysCtrl(); 
+    InitEpwm();
     InitI2C();
     InitDisplay();
 

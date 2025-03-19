@@ -3,7 +3,7 @@
 #define INIT_H_
 
 void InitSysCtrl(void);
-void InitDSP(void);
+void InitEpwm(void);
 void InitI2C(void);
 
 #endif /* INIT_H_ */
