@@ -30,9 +30,9 @@ void main(void)
     SendI2C2(0x22, 0x00); // Set page address
     SendI2C(0xFF); // Set page end
     SendI2C2(0x21, 0x00); // Set column address
-    SendI2C(OLED_WIDTH - 1); // Set column end
+    SendI2C(DISPLAY_WIDTH - 1); // Set column end
 
-    unsigned long int n = OLED_WIDTH * OLED_HEIGHT/8; 
+    unsigned long int n = DISPLAY_WIDTH * DISPLAY_HEIGHT/8; 
     Uint16* buffer = malloc(n);
 
     for (unsigned long int i = 0; i<n; i++) {
