@@ -11,13 +11,9 @@ void main(void)
     InitI2C();
     InitDisplay();
 
-    unsigned int n = DISPLAY_WIDTH * DISPLAY_HEIGHT/8;
-    unsigned int *buffer = malloc(n);
-
-    for (unsigned int i = 0; i<n; i++) {
+    for (unsigned int i = 0; i < DISPLAY_BUFFER_SIZE; i++) {
         buffer[i] = 0x00;
     }
     
-    SendDisplayBuffer(buffer, n);
-    // free(buffer);
+    UpdateDisplay(buffer);
 }

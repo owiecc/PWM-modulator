@@ -3,6 +3,8 @@
 #include "f28002x_device.h"
 #include "f28002x_i2c.h"
 
+unsigned int buffer[DISPLAY_WIDTH * DISPLAY_HEIGHT/8];
+
 void InitDisplay()
 {
     SendI2C(0xAE); // Display off
@@ -69,9 +71,9 @@ int SendI2C2(unsigned int data1, unsigned int data2)
     return 0;
 }
 
-int SendDisplayBuffer(unsigned int *buffer, unsigned int sizeBuffer) 
+int UpdateDisplay(unsigned int *buffer) 
 {
-    //unsigned int sizeBuffer = 128; // (OLED_WIDTH*OLED_HEIGHT)/2;
+    unsigned int sizeBuffer = DISPLAY_BUFFER_SIZE; // (OLED_WIDTH*OLED_HEIGHT)/2;
     unsigned int *ptr = buffer;
     while (I2caRegs.I2CSTR.bit.BB != 0); // wait for bus free
     I2caRegs.I2CSAR.all = DISPLAY_I2C_ADDR; // display address

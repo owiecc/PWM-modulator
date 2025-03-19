@@ -5,10 +5,13 @@
 #define DISPLAY_I2C_ADDR 0x3C
 #define DISPLAY_WIDTH 128
 #define DISPLAY_HEIGHT 64
+#define DISPLAY_BUFFER_SIZE (DISPLAY_WIDTH * DISPLAY_HEIGHT/8)
 
 void InitDisplay(void);
 int SendI2C(unsigned int);
 int SendI2C2(unsigned int, unsigned int);
-int SendDisplayBuffer(unsigned int *, unsigned int);
+int UpdateDisplay(unsigned int *);
+
+extern unsigned int buffer[];
 
 #endif /* SSD1306_H_ */
