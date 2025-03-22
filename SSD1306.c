@@ -3,7 +3,10 @@
 #include "f28002x_device.h"
 #include "f28002x_i2c.h"
 
-unsigned int buffer[DISPLAY_WIDTH * DISPLAY_HEIGHT/8];
+int SendI2C(unsigned int);
+int SendI2C2(unsigned int, unsigned int);
+
+//unsigned int buffer[DISPLAY_WIDTH * DISPLAY_HEIGHT/8];
 
 void InitDisplay()
 {
@@ -31,7 +34,6 @@ void InitDisplay()
     SendI2C2(0x21, 0x00); // Set column address
     SendI2C(DISPLAY_WIDTH - 1); // Set column end
 }
-
 
 int SendI2C(unsigned int data)
 {

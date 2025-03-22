@@ -8,10 +8,8 @@
 #define DISPLAY_BUFFER_SIZE (DISPLAY_WIDTH * DISPLAY_HEIGHT/8)
 
 void InitDisplay(void);
-int SendI2C(unsigned int);
-int SendI2C2(unsigned int, unsigned int);
 int UpdateDisplay(unsigned int *);
 
-extern unsigned int buffer[];
+//extern unsigned int buffer[];
 
 #endif /* SSD1306_H_ */
